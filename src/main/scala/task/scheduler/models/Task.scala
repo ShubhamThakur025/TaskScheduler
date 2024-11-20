@@ -1,4 +1,4 @@
-package models
+package task.scheduler.models
 
 import java.util.UUID
 
@@ -8,7 +8,7 @@ case object Running extends taskStatus
 case object Waiting extends taskStatus
 
 class Task (
-           val taskId: UUID = UUID.randomUUID(),
+           val taskId: String = UUID.randomUUID().toString,
            val task: String,
            val command: () => Unit,
            val taskStatus: taskStatus = Waiting,
