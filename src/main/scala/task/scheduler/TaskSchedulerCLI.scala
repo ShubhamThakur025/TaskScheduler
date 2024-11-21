@@ -45,7 +45,10 @@ object TaskSchedulerCLI {
           case "3" => CLIHandler.cancelTask()
           case "4" => CLIHandler.cancelAllTasks()
           case "5" => displayMenu()
-          case _ => break
+          case _ =>
+            CLIHandler.cancelAllTasks()
+            CLIHandler.shutDownScheduler()
+            break
       }
     }
   }

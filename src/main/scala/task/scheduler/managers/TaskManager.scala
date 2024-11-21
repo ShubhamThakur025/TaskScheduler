@@ -2,12 +2,15 @@ package task.scheduler.managers
 
 import task.scheduler.models.Task
 import task.scheduler.repositories.TaskRepository
+
+import java.util.Date
 import java.util.concurrent.ScheduledFuture
 import scala.util.{Failure, Success, Try}
 
 object TaskManager {
+  private val fm: FileManager = new FileManager()
   def addOnceOccurringTask(taskDesc: String, delay: Long, logInfo: String): Task = {
-    val command = () => println(logInfo)
+    val command = () => fm.logToFile(s"[${new Date(System.currentTimeMillis())}] RUNNING TASK: $taskDesc\n$logInfo")
     val task: Task = new Task(task = taskDesc, command = command, delay = Some(delay))
     val scheduledFuture = Scheduler.scheduleTaskOnce(task)
     TaskRepository.addTaskToRepository(task = task, scheduledFuture = scheduledFuture)
@@ -15,7 +18,7 @@ object TaskManager {
   }
 
   def addRecurringTask(taskDesc: String, interval: Long, logInfo: String): Task = {
-    val command = () => println(logInfo)
+    val command = () => fm.logToFile(s"[${new Date(System.currentTimeMillis())}] RUNNING TASK: $taskDesc\n$logInfo")
     val task: Task = new Task(task = taskDesc, command = command,interval = Some(interval))
     val scheduledFuture = Scheduler.scheduleTaskRecurring(task)
     TaskRepository.addTaskToRepository(task = task, scheduledFuture = scheduledFuture)
@@ -49,4 +52,6 @@ object TaskManager {
     }
     println("SUCCESS: All tasks canceled.")
   }
+  
+  def shutDownScheduler(): Unit = Scheduler.shutDown()
 }

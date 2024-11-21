@@ -7,10 +7,7 @@ import java.util.concurrent.{Executors, ScheduledExecutorService, ScheduledFutur
 object Scheduler {
   private val scheduledExecutor: ScheduledExecutorService = Executors.newScheduledThreadPool(4)
   def scheduleTaskOnce(task: Task): ScheduledFuture[_] = {
-    val runnable: Runnable = () => {
-      println(s"[${new java.util.Date(System.currentTimeMillis())}] RUNNING TASK: ${task.task}")
-      task.command()
-    }
+    val runnable: Runnable = () => task.command()
     task.delay match
       case Some(delay) =>
         scheduledExecutor.schedule(runnable, delay, java.util.concurrent.TimeUnit.MILLISECONDS)
@@ -20,10 +17,7 @@ object Scheduler {
   }
 
   def scheduleTaskRecurring(task: Task): ScheduledFuture[_] = {
-    val runnable: Runnable = () => {
-      println(s"[${new java.util.Date(System.currentTimeMillis())}] RUNNING TASK: ${task.task}")
-      task.command()
-    }
+    val runnable: Runnable = () => task.command()
     task.interval match
       case Some(interval) =>
         scheduledExecutor.scheduleAtFixedRate(runnable, 0, interval, java.util.concurrent.TimeUnit.MILLISECONDS)

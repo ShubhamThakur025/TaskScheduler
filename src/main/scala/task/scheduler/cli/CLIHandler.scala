@@ -60,4 +60,6 @@ object CLIHandler {
     println("=================PROCESSING YOUR REQUEST=========================")
     TaskManager.cancelAllTasks()
   }
+  
+  def shutDownScheduler(): Unit = TaskManager.shutDownScheduler()
 }
